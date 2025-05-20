@@ -4,3 +4,9 @@ Añado otra línea.
 Esto es otra línea.
 Ya no soy la última línea,
 ahora hay otra al final.
+-----------------------
+Sugerencias:
+-Acorta el texto
+-Elimina los puntos finales
+-No hace falta un separador
+-Tampoco una aclaración
