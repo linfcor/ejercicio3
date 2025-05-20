@@ -1,11 +1,6 @@
-Soy el fichero tres.
-Añado otra línea.
----------------------- <- Esto es un separador
-Esto es otra línea.
+Soy el fichero tres
+---------------------- 
 Ya no soy la última línea,
-ahora hay otra al final.
+ahora hay otra al final
 -----------------------
-Sugerencias:
--Acorta el texto
--Elimina los puntos finales
--Tampoco una aclaración
+
