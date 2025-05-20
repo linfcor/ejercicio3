@@ -1,3 +1,6 @@
 Soy el fichero tres y estoy en la rama cambios.
 Añado otra línea.
-Última línea por ahora.
+---------------------- <- Esto es un separador
+Esto es otra línea.
+Ya no soy la última línea,
+ahora hay otra al final.
