@@ -1,6 +1,11 @@
-Soy el fichero tres y estoy en la rama cambios.
+Soy el fichero tres.
 Añado otra línea.
 ---------------------- <- Esto es un separador
 Esto es otra línea.
 Ya no soy la última línea,
 ahora hay otra al final.
+-----------------------
+Sugerencias:
+-Acorta el texto
+-Elimina los puntos finales
+-Tampoco una aclaración
