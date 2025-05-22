@@ -14,7 +14,7 @@ Para enlazar mi repositorio he seguido los pasos que se indican en el curso de G
 
 Para enlazarlo, cree un repositorio desde cero desde la web de GitHub con el nombre de "ejercicio 3". Tras crearlo, copié la ruta SSH y, en mi consola, asigné esa ruta a mi repositorio local gracias al comando `git remote set-url`.
 
-![Enlace con GitHub](/img/2.png)
+![Enlace con GitHub](img/2.png)
 
 Como ya tenía cambios subidos a mi repositorio, tuve que subir toda esa información con el comando `git push -u origin main`.
 
