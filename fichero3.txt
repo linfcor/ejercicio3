@@ -1,6 +1,0 @@
-Soy el fichero tres
----------------------- 
-Ya no soy la última línea,
-ahora hay otra al final
------------------------
-
