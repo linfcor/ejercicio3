@@ -288,3 +288,101 @@ Para crear ramas lo he hecho de dos formas distintas:
 Como se puede ver en la captura he creado distintas ramas y he trabajado entre ellas. Para fusionar el contenido, he utilizado el comando `git merge --no-ff nombre_rama`. Es muy importante tener en cuenta varios aspectos:
 * Hay que situarse en la rama a la que quieres llevar los cambios ANTES de ejecutar git merge
 * Para que se cree el commit que ilustra la fusión y podamos ver las distintas ramas en nuestra interfaz gráfica, debemos indicar en el comando que no queremos hacerlo de forma fast-foward
+
+## Ejercicio 1.4: Primera base de datos  
+
+Este ejercicio consiste en crear una BBDD sencilla con MySQL y realizar consultas básicas.
+
+Como aclaración inicial, este ejercicio se ha llevado a cabo utilizando MySQL (previamente instalado) y la herramienta con interfaz gráfica MYSQL Workbench, ya que es la que hemos utilizado en el aula. Además, se ha reutilizado la conexión que se creó en su momento.
+
+![Iniciando la conexión](img/SQL/1.png)
+
+### 1. Crear tablas
+
+Para poder trabajar con consultas SQL, se necesita crear las tablas sobre la que se realizarán las consultas. En el enunciado se especifica la creación de dos tablas: `clientes` y `productos`. Los pasos seguidos fueron:
+
+1. Crear una BD con `CREATE DATABASE`
+    
+    ![Crear BD](img/SQL/2.png)
+
+    ![Crear BD 2](img/SQL/3.png)
+
+2. Utilizar esa BD para crear las tablas con `USE`
+
+3. Crear las tablas con restricciones con `CREATE TABLE`
+
+    ![Crear tablas](img/SQL/4.png)
+
+    Es importante acabar todas las sentencias dentro de CREATE TABLE con coma, salvo la última y acabar todas las sentencias de SQL con punto y coma.
+
+    Las restricciones consistieron en:
+    * Establecer la **PRIMARY KEY** de cada tabla (dni en clientes y id_producto en productos)
+    * Utilizar **NOT NULL** para aquellos campos que queramos que sean obligatorios de rellenar, que son todos salvo el teléfono en la tabla clientes
+
+
+### 2. Insertar registros simulados
+
+Una vez que tenemos las tablas creadas, necesitamos datos con los que trabajar. No obstante, las tablas creadas estaban vacías, por eso el siguiente paso  fue la insercción de datos. Para insertar datos debemos utilizar el comando `INSERT INTO tabla (columnas) VALUES (valores)`. Es imporante recalcar que indicar las columnas de la tabla no es obligatorio, estas se pueden omitir para ahorrarnos escribir tanto. Por eso, en mi BD inserté los valores sin indicar las columnas.
+
+  ![Insertar datos en las tablas](img/SQL/5.png)
+
+  Es importante acabar todas las sentencias en `;`.
+
+
+### 3. Ejecutar consultas
+
+Como el ejercicio tampoco especificaba las consultas exactas que hacer sobre mi BD, decidí hacer las siguientes:
+
+- Seleccionar toda la tabla de clientes y productos con `SELECT * FROM clientes` y `SELECT * FROM productos`
+
+    ![SELECT * FROM clientes ](img/SQL/6.png)
+    ![SELECT * FROM productos](img/SQL/7.png)
+
+ - Seleccionar el nombre y el telefono de aquellos clientes que tengan un teléfono guardado con `SELECT nombre_cliente, telefono FROM clientes WHERE telefono IS NOT NULL`
+
+    ![SELECT nombre_cliente, telefono FROM clientes WHERE telefono IS NOT NULL](img/SQL/8.png)
+
+ - Seleccionar los nombres y emails de las personas cuyo email acabe ".es" con `SELECT nombre_cliente, email FROM clientes WHERE email LIKE '%.es'`
+
+    ![SELECT nombre_cliente, email FROM clientes WHERE email LIKE '%.es'](img/SQL/9.png)
+
+- Seleccionar los productos que cuestan más de 5 y ordenarlos de menor a mayor con `SELECT nombre_producto, precio FROM productos WHERE precio > 5 ORDER BY precio DESC`
+
+    ![SELECT nombre_producto, precio FROM productos WHERE precio > 5 ORDER BY precio DESC](img/SQL/10.png)
+
+### 3.1. Joins
+
+Para realizar consultas con joins se necesita una relación entre varias tablas. Para crear esa relación decidí crear una tabla intermedia llamada `ventas` en la que inserté posteriormente algunos registros.
+
+Dentro de la tabla `ventas` establecí 2 foreign keys que apuntan cada una a las otras dos tablas previamente creadas. De esta forma, quedan todas las tablas relacionadas.
+
+![Crear tabla ventas](img/SQL/11.png)
+
+![Insertar en la tabla ventas](img/SQL/12.png)
+
+Una vez tenemos las tablas con las que poder trabajar, lancé algunas consultas con join:
+
+- Seleccionar el nombre y el producto de todos los clientes que han comprado:
+
+    Esta consulta se realizó con un `inner join` que devuelve las **concidencias** que haya entre las tablas con las que se haga el join.
+
+    ![JOIN 1](img/SQL/13.png)
+
+- Ver el total gastado (con la función colectiva `SUM()`) de cada cliente que haya comprado y ordenarlo de mayor a menor:
+
+     Esta consulta se realizó con un `inner join` que devuelve las **concidencias** que haya entre las tablas con las que se haga el join.
+
+    Importante recalcar que para que aparezca más de un resultado como `gastado` agrupé a los clientes por nombre. De esta forma sale un resultado de la función colectiva por cada nombre (que suponen grupos distintos).
+
+    ![JOIN 2](img/SQL/14.png)
+
+- Seleccionar los productos que no se han vendido: 
+
+    Esta consulta se realizó con un `left join` que recoge **todos** los resultados en la tabla `productos` y las **coincidencias** que haya en la tabla `ventas`. Para aquellos productos que no aparezcan en la tabla ventas, dejará esos campos como `null`. Por eso, si queremos saber cuales no se han vendido, deberemos buscar aquellos que tengan null en la tabla de ventas.
+
+    ![JOIN 2](img/SQL/15.png)
+
+
+
+
+
