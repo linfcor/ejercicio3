@@ -1,7 +1,7 @@
 # SEMANA 1
 Para esta semana se entregan todos los ejercicios prácticos propuestos.
 
-# Ejercicio 1.1: Instalación y configuración de sistemas operativos  
+## Ejercicio 1.1: Instalación y configuración de sistemas operativos  
 
 Este ejercicio consiste en instalar una distribución de Linux sin GUI (interfaz gráfica) en  entornos virtualizados (VirtualBox) y realizar una serie de tareas.
 
@@ -97,8 +97,131 @@ Para llevar a cabo parte del acceso remoto, realicé los siguientes pasos:
     ![Creación remota 2](img/SO/20.png)
     Por último, siguiendo con la misma disposición de las máquinas que en la captura anterior, como última prueba decidí escribir un archivo .txt desde la máquina 1.
 
+## Ejercicio 1.2: Gestión del sistema de archivos   
 
-    
+Este ejercicio consiste en trabajar con permisos, carpetas, enlaces simbólicos y estructuras  jerárquicas en Linux.  
+
+### 1. Trabajar con las estructuras jerárquicas: árbol de directorios
+
+Merece la pena destacar que la mayoría de los comandos se ejecutaron con `sudo` (modo administrador) delante para tener los permisos suficientes.
+
+El primer paso de esta tarea era crear un árbol de directorios que simulase los distintos departamentos de una empresa. Para poder visualizarlo en forma de árbol de directorios como tal, empleé el comando `tree`. No obstante, este comando no viene instalado por defecto en la máquina virtual, por lo que primero ejecuté `sudo apt-get update` para buscar actualizaciones y luego `sudo apt-get install tree` para instalarlo. 
+
+![Instalación de tree](img/archivos/1.png)
+
+El segundo paso fue decidir la estructura de mi empresa. Esta tiene los siguientes departamentos y subapartados:
+- Ventas: clientes 
+- RRHH: contratos, entrevistas 
+- Contabilidad: facturas, Hacienda
+- Atención al cliente: reclamaciones 
+- Logística: inventario, proveedores, envíos
+
+Una vez tuve la estructura pensada, creé las distintas carpetas en una estructura compleja con el comando `mkdir -p`. Para crear una carpeta dentro de otra simplemente se escribe el nombre de la carpeta contenedora seguida de `/` y el nombre de la carpeta que va dentro. Para crear varias carpetas dentro de otra lo más cómodo es meterlas entre llaves `{}`. También es muy importante que estén separadas por comas sin espacio entre los nombres para evitar errores, ya que el espacio entre nombres de carpetas supone que estas estén en el mismo nivel.
+
+![Árbol de directorios](img/archivos/2.png)
+
+### 2. Trabajar con permisos: usuarios y grupos
+
+Para empezar con esta segunda parte del ejercicio, creé varios usuarios con `sudo useradd -m`, que son los trabajadores que pertenen a los distintos departamentos de mi empresa. El comando `-m` se encarga de crear su carpeta personal automáticamente.
+
+![Creación de usuarios](img/archivos/3.png)
+![Creación de usuarios](img/archivos/4.png)
+
+Tras crear los usuarios, les asigné una contraseña con `sudo passwd`. Esto será útil más tarde cuando tenga que iniciar sesión en sus perfiles.
+
+![Creación de contraseña](img/archivos/4-5.png)
+
+Posteriormente, creé los grupos con `sudo groupadd` y asigné los trabajadores a dichos grupos con `sudo usermod -aG` que modifica el usuario para añadirlo a los grupos secundarios que especifiquemos sin borrar los existentes.
+
+![Creación de grupos](img/archivos/5.png)
+![Asignación grupos](img/archivos/6.png)
+
+Para comprobar los miembros de cada grupo utilicé el comando `getent group`. 
+
+![Comprobación de grupos](img/archivos/7.png)
+
+A continuación, asigné las carpetas a cada grupo con `sudo chown -R` para que quede registraddo que pertenecen a ese grupo en específico y no a otro.
+
+![Asignación de carpetas a grupos](img/archivos/8.png)
+
+Para establecer los permisos decidí seguir las siguientes reglas:
+
+1. El propietario de la carpeta tendrá todos los permisos (7) 
+
+2. Cada grupo tendrá todos los permisos en sus propias carpetas (7)
+
+3. Los otros usuarios o grupos solo tendrán permisos de lectura en las carpetas que no les pertenezcan (4)
+
+La nomenclatura que he seguido para establecer los permisos es en binario por mayor comodidad.
+
+También es importante aclarar que antes establecí unos permisos (todos para propietario y lectura y ejecución para el resto) que permitieran que todos los usuarios puedan acceder a la carpeta `mi_empresa` y al directorio `home/laura` que es donde esta se aloja.
+
+![Asignación de permisos](img/archivos/10.png)
+
+Los permisos los establecí con el comando `chmod -R 774` seguido de la ruta de cada carpeta.
+
+![Asignación de permisos](img/archivos/9.png)
+
+Para observar los permisos que tiene cada carpeta ejecuté el comando `ls -l` que lista los directorios de una forma extensa, indicando los permisos, el autor, el espacio que ocupa, la fecha y hora a la que fue creada la carpeta y su nombre.
+
+![Comprobación de permisos](img/archivos/11.png)
+
+En la captura se pueden ver los permisos se dividen en tres categorías: usuario-grupo-otros. Todas las carpetas tienen todos los permisos para el usuario, todos los permisos para el grupo y solo permiso de lectura para el que no es ninguno de los anteriores.
+
+Hice pruebas desde un usuario de cada departamento:
+
+**Pablo del departamento de Ventas**
+
+![Comprobación de permisos pablo](img/archivos/pablo.png)
+
+**Borja del departamento de Contabilidad**
+
+![Comprobación de permisos Borja](img/archivos/borja.png)
+
+**Belén del departamento de Atención al Cliente**
+
+![Comprobación de permisos Belén](img/archivos/belen.png)
+
+**Antonio del departamento de Logística**
+
+![Comprobación de permisos Antonio](img/archivos/antonio.png)
+
+**María del departamento de RRHH**
+
+![Comprobación de permisos María](img/archivos/maria.png)
+
+
+Para cambiar de usuario simplemente ejecuté `su` y el nombre de usuario. Para salir del usuario ejecuté `exit`. 
+
+Como se puede ver en las capturas, mostré el usuario con el que estoy trabajando con `whoami` y para ver en que ruta me encuentro actualmente ejecuté el comando `pwd`. Intenté acceder a las carpetas de departamento correspondientes y como se ve no hay ningún problema con eso, pero al intentar acceder al resto de carpetas no se puede, ya que no se tienen permisos para ello.
+
+### 3. Enlaces simbólicos
+
+Como parte final del ejercicio, trabajé con los enlaces simbólicos. Para implementar esto, creé una carpeta llamada `importante` en la carpeta personal de mi usuario laura (que es mi usuario principal). Dentro de esa carpeta creé un fichero y escribí un horario ficticio con el comando `nano` seguido del nombre del fichero y su tipo `horario.txt`. La idea era crear una carpeta extra dentro de mi_empresa que se llamara `comun` en la que tener un enlace a este documento, para que todos pudieran consultarlo.
+
+![Escritura del horario](img/archivos/13.png)
+
+Una vez creado el fichero, asigné permisos. Para la carpeta, que el propietario tenga todos los permisos y el resto puedan leer y ejecutar para poder entrar en la carpeta. Para el documento, que el propietario tenga todos los permisos y que el resto solo puedan leer.
+
+![Permisos para horario](img/archivos/12.png)
+
+Creé la carpeta común.
+
+![Creo nueva carpeta](img/archivos/14.png)
+
+Le asigné permisos para que el propietario tenga todos los permisos y el resto puedan leer y ejecutar (para poder entrar en la carpeta).
+
+![Permisos](img/archivos/15.png)
+
+Finalmente creé el enlace con el comando `ln -s` y haciendo referencia al origen y donde quiero que esté alojado el enlace.
+
+![Enlace](img/archivos/16.png)
+
+Para comprobar si puedo leer el archivo, inicié sesión con otro usuario que no fuera mi principal, por ejemplo, Pablo.
+
+![Comprobación enlace](img/archivos/17.png)
+
+Como se puede ver en la captura, accedí sin problema a la carpeta común. Leí el contenido del archivo con el comando `cat` y el nombre del archivo y pude leerlo sin problema desde esa misma carpeta.
 
 
 ## Ejercicio 1.3: Iniciación a Git
